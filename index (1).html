@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marathon Vitamin Shops — Energía que se nota en cada kilómetro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ============ TOKENS — paleta exacta del cliente ============ */
+:root{
+  --primary:#2E7D5B;      /* headers, footer, elementos clave */
+  --bg-alt:#A8D5BA;       /* cards / hover states */
+  --cta:#245A75;          /* texto principal y CTAs */
+  --bg:#FFFFFF;           /* fondo principal */
+  --section-alt:#E8ECEB;  /* secciones secundarias */
+  --card:#FFFFFF;
+  --ink:#1E2E27;
+  --ink-soft:#4F6259;
+  --line:#D7E3DC;
+  --primary-light:#3F9973;
+  --cta-dark:#1B4459;
+  --shadow: 0 10px 30px rgba(30,46,39,0.08);
+  --shadow-lift: 0 18px 40px rgba(30,46,39,0.14);
+  --radius-s: 10px;
+  --radius-m: 18px;
+  --radius-l: 28px;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Work Sans', sans-serif;
+}
+/* Modo oscuro: invierte blancos/grises, conserva verdes y azul de marca para legibilidad */
+:root[data-theme="dark"]{
+  --bg:#12201A;
+  --section-alt:#1B2C24;
+  --card:#1E3129;
+  --ink:#ECF2EE;
+  --ink-soft:#B7CBC1;
+  --line:#2E4438;
+  --bg-alt:#2A4A38;
+  --primary:#3F9973;
+  --primary-light:#5CBB92;
+  --cta:#3F86AC;
+  --cta-dark:#245A75;
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  --shadow-lift: 0 18px 40px rgba(0,0,0,0.5);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.55;
+  transition:background .3s ease, color .3s ease;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:var(--font-display);
+  color:var(--ink);
+  margin:0 0 .4em;
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+p{margin:0 0 1em;color:var(--ink-soft);}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+button{font-family:var(--font-body);cursor:pointer;}
+.container{max-width:1200px;margin:0 auto;padding:0 28px;}
+section{position:relative;}
+::selection{background:var(--bg-alt);color:var(--ink);}
+
+.route-marker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.8rem;font-weight:700;
+  color:var(--primary);
+  margin-bottom:14px;
+}
+.route-marker .dot{
+  width:9px;height:9px;border-radius:50%;
+  background:var(--cta);
+}
+.route-marker .track{
+  width:44px;height:2px;
+  background:repeating-linear-gradient(to right, var(--line) 0 6px, transparent 6px 10px);
+}
+
+/* ============ RACE PROGRESS BAR ============ */
+.race-progress{position:fixed;top:0;left:0;width:100%;height:4px;z-index:200;background:rgba(0,0,0,.05);}
+.race-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--cta));transition:width .1s linear;position:relative;}
+.race-progress-runner{position:absolute;right:-11px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--cta);}
+
+/* ============ STAT COUNTERS ============ */
+.hero-stats{display:flex;gap:30px;margin-top:32px;flex-wrap:wrap;}
+.hero-stat{display:flex;flex-direction:column;}
+.hero-stat .num{font-family:var(--font-display);font-size:2.1rem;font-weight:700;color:var(--primary);line-height:1;}
+.hero-stat .num sup{font-size:1.1rem;}
+.hero-stat .lbl{font-size:.78rem;color:var(--ink-soft);margin-top:4px;max-width:14ch;}
+
+/* ============ RATING STARS + BADGES ============ */
+.card-rating{display:flex;align-items:center;gap:5px;margin-bottom:8px;font-size:.75rem;color:var(--ink-soft);}
+.card-rating .stars{color:#E8A93B;letter-spacing:1px;font-size:.8rem;}
+.badge-fly{position:absolute;top:12px;left:12px;background:var(--cta);color:#fff;font-size:.68rem;font-weight:700;padding:5px 11px;border-radius:20px;z-index:2;display:flex;align-items:center;gap:5px;}
+.card{position:relative;}
+
+/* ============ TESTIMONIALS ============ */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+.testi-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);padding:26px;box-shadow:var(--shadow);}
+.testi-stars{color:#E8A93B;font-size:.85rem;margin-bottom:12px;}
+.testi-quote{font-size:.92rem;color:var(--ink);margin-bottom:16px;}
+.testi-who{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:42px;height:42px;border-radius:50%;background:var(--bg-alt);color:var(--cta);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--font-display);flex-shrink:0;}
+.testi-who .name{font-weight:700;font-size:.86rem;color:var(--ink);}
+.testi-who .meta{font-size:.76rem;color:var(--ink-soft);}
+
+/* ============ QTY STEPPER ============ */
+.qty-stepper{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:20px;padding:3px;}
+.qty-stepper button{width:22px;height:22px;border-radius:50%;border:none;background:var(--section-alt);color:var(--cta);font-size:.8rem;display:flex;align-items:center;justify-content:center;}
+.qty-stepper button:hover{background:var(--bg-alt);}
+.qty-stepper span{font-size:.82rem;font-weight:700;min-width:14px;text-align:center;}
+
+/* ============ CHATBOT ============ */
+.chat-fab{position:fixed;bottom:26px;right:98px;z-index:80;width:60px;height:60px;border-radius:50%;background:var(--primary);color:#fff;border:none;box-shadow:0 14px 30px rgba(46,125,91,.4);display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s ease;}
+.chat-fab:hover{transform:scale(1.08);}
+.chat-fab .pulse{position:absolute;inset:0;border-radius:50%;border:2px solid var(--primary);animation:chatpulse 2.4s ease-out infinite;}
+@keyframes chatpulse{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.6);opacity:0;}}
+.chat-panel{position:fixed;bottom:100px;right:26px;width:370px;max-width:92vw;height:520px;max-height:72vh;background:var(--card);border-radius:var(--radius-l);box-shadow:var(--shadow-lift);z-index:96;display:flex;flex-direction:column;overflow:hidden;transform:translateY(20px) scale(.97);opacity:0;pointer-events:none;transition:transform .22s ease,opacity .22s ease;border:1px solid var(--line);}
+.chat-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:auto;}
+.chat-head{background:var(--primary);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px;}
+.chat-head .mark{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.chat-head h4{color:#fff;margin:0;font-size:.94rem;}
+.chat-head p{color:#DCEFE3;margin:0;font-size:.72rem;}
+.chat-close{margin-left:auto;background:none;border:none;color:#fff;font-size:1rem;opacity:.85;}
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--section-alt);}
+.chat-msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:.86rem;line-height:1.45;}
+.chat-msg.bot{background:var(--card);color:var(--ink);align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 2px 8px rgba(30,46,39,.06);}
+.chat-msg.user{background:var(--cta);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.chat-msg.typing{display:flex;gap:4px;align-items:center;padding:12px 16px;}
+.chat-msg.typing span{width:6px;height:6px;border-radius:50%;background:var(--ink-soft);animation:typingdot 1.2s infinite;}
+.chat-msg.typing span:nth-child(2){animation-delay:.2s;}
+.chat-msg.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typingdot{0%,60%,100%{opacity:.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px;background:var(--section-alt);}
+.chat-chip{background:var(--card);border:1px solid var(--line);color:var(--cta);font-size:.74rem;font-weight:600;padding:6px 12px;border-radius:20px;}
+.chat-chip:hover{background:var(--bg-alt);}
+.chat-foot{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:var(--card);}
+.chat-foot input{flex:1;border:1px solid var(--line);border-radius:20px;padding:10px 16px;font-size:.86rem;background:var(--bg);color:var(--ink);font-family:var(--font-body);}
+.chat-foot button{width:40px;height:40px;border-radius:50%;background:var(--cta);color:#fff;border:none;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.chat-foot button:hover{background:var(--cta-dark);}
+@media (max-width:520px){.chat-panel{right:12px;bottom:96px;width:calc(100vw - 24px);}.chat-fab{right:88px;}}
+
+/* ============ TOPBAR — verde claro con texto azul ============ */
+.topbar{
+  background:var(--bg-alt);
+  color:var(--cta);
+  font-size:.82rem;
+  padding:8px 0;
+}
+.topbar .container{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+}
+.topbar-msg{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--cta);}
+.topbar-msg i{color:var(--cta);}
+.track-link{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(36,90,117,0.12);
+  padding:5px 12px;border-radius:20px;
+  border:none;color:var(--cta);font-size:.8rem;font-weight:600;
+  transition:background .2s ease;
+}
+.track-link:hover{background:rgba(36,90,117,0.22);}
+
+/* ============ NAV ============ */
+header.nav-wrap{
+  position:sticky;top:0;z-index:50;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-display);
+  font-size:1.35rem;font-weight:700;color:var(--primary);
+}
+.brand .mark{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--primary);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1rem;
+  box-shadow:var(--shadow);
+}
+.nav-links{
+  display:flex;gap:28px;list-style:none;margin:0;padding:0;
+}
+.nav-links a{
+  font-size:.94rem;font-weight:600;color:var(--ink-soft);
+  padding:6px 2px;border-bottom:2px solid transparent;
+  transition:color .2s ease, border-color .2s ease;
+}
+.nav-links a:hover{color:var(--primary);border-color:var(--cta);}
+.nav-actions{display:flex;align-items:center;gap:10px;}
+.icon-btn{
+  position:relative;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);
+  background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--primary);font-size:1rem;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.icon-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.badge{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--cta);color:#fff;
+  font-size:.68rem;font-weight:700;
+  min-width:19px;height:19px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 3px;
+  border:2px solid var(--bg);
+}
+.hamburger{display:none;}
+
+/* ============ HERO ============ */
+.hero{padding:70px 0 60px;overflow:hidden;}
+.hero .container{
+  display:grid;grid-template-columns:1.1fr 0.9fr;gap:50px;align-items:center;
+}
+.hero h1{font-size:clamp(2.3rem, 4vw, 3.5rem);line-height:1.08;max-width:11.5ch;}
+.hero .lede{font-size:1.08rem;max-width:46ch;color:var(--ink-soft);}
+.hero-ctas{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 26px;border-radius:100px;
+  font-weight:700;font-size:.96rem;border:none;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn-cta{
+  background:var(--cta);color:#fff;
+  box-shadow:0 10px 24px rgba(36,90,117,.3);
+}
+.btn-cta:hover{background:var(--cta-dark);transform:translateY(-2px);}
+.btn-outline{
+  background:transparent;color:var(--primary);
+  border:1.5px solid var(--primary);
+}
+.btn-outline:hover{background:var(--primary);color:#fff;transform:translateY(-2px);}
+.hero-visual{position:relative;display:flex;align-items:center;justify-content:center;min-height:380px;}
+.hero-ring{
+  position:absolute;width:380px;height:380px;border-radius:50%;
+  border:2px dashed var(--line);animation:spin 60s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hero-photo-wrap{
+  width:300px;height:300px;border-radius:50%;overflow:hidden;
+  box-shadow:var(--shadow-lift);border:6px solid var(--card);
+  position:relative;z-index:2;background:var(--bg-alt);
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-photo-wrap img{width:100%;height:100%;object-fit:cover;}
+.hero-chip{
+  position:absolute;z-index:3;background:var(--card);
+  border-radius:var(--radius-m);box-shadow:var(--shadow-lift);
+  padding:12px 16px;display:flex;align-items:center;gap:10px;
+  font-size:.85rem;font-weight:700;color:var(--ink);
+}
+.hero-chip i{color:var(--primary);font-size:1.1rem;}
+.chip-1{top:6px;left:-16px;}
+.chip-2{bottom:14px;right:-20px;}
+@media (max-width:640px){.hero-chip{display:none;}}
+
+.section-head{max-width:640px;margin-bottom:44px;}
+.section-pad{padding:84px 0;}
+.bg-alt{background:var(--section-alt);}
+
+/* ============ CATÁLOGO ============ */
+.grid-products{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:26px;
+}
+.card{
+  background:var(--card);border-radius:var(--radius-m);overflow:hidden;
+  border:1px solid var(--line);
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  display:flex;flex-direction:column;
+}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift);background:var(--bg-alt);}
+.card-img-wrap{
+  height:200px;width:100%;background:var(--section-alt);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.card-body{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1;}
+.card-tag{font-size:.72rem;font-weight:700;letter-spacing:.02em;color:var(--primary);margin-bottom:6px;}
+.card h3{font-size:1.15rem;margin-bottom:6px;}
+.card p.desc{font-size:.88rem;flex:1;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;}
+.price{font-family:var(--font-display);font-size:1.25rem;font-weight:600;color:var(--primary);}
+.add-btn{
+  background:var(--cta);color:#fff;border:none;border-radius:100px;
+  padding:9px 16px;font-size:.85rem;font-weight:700;
+  display:flex;align-items:center;gap:6px;
+  transition:background .2s ease, transform .2s ease;
+}
+.add-btn:hover{background:var(--cta-dark);transform:scale(1.04);}
+.add-btn.added{background:var(--primary);}
+
+/* ============ CREA TU PACK ============ */
+.builder{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:40px;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius-l);padding:40px;box-shadow:var(--shadow);
+}
+.builder h3{font-size:1.5rem;}
+.option-group{margin-bottom:24px;}
+.check-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;border:1px solid var(--line);
+  border-radius:var(--radius-s);margin-bottom:10px;
+  transition:border-color .2s ease, background .2s ease;
+}
+.check-row:hover{border-color:var(--primary);background:var(--section-alt);}
+.check-row label{display:flex;align-items:center;gap:12px;font-size:.92rem;cursor:pointer;color:var(--ink);}
+.check-row input[type="checkbox"]{width:18px;height:18px;accent-color:var(--cta);cursor:pointer;}
+.check-row .add-price{font-size:.85rem;color:var(--ink-soft);}
+select#packSize{
+  width:100%;padding:12px 14px;border-radius:var(--radius-s);
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);
+  font-size:.92rem;font-family:var(--font-body);
+}
+.builder-summary{
+  background:var(--section-alt);border-radius:var(--radius-m);padding:28px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.summary-line{
+  display:flex;justify-content:space-between;font-size:.9rem;
+  padding:8px 0;border-bottom:1px dashed var(--line);color:var(--ink-soft);
+}
+.summary-total{display:flex;justify-content:space-between;align-items:baseline;margin:18px 0;}
+.summary-total .amount{font-family:var(--font-display);font-size:2rem;color:var(--primary);}
+#emptyPackMsg{font-size:.85rem;color:var(--ink-soft);}
+
+/* ============ TRUST STRIP ============ */
+.trust-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:26px;}
+.trust-item{text-align:center;padding:26px 16px;border-radius:var(--radius-m);background:var(--card);border:1px solid var(--line);}
+.trust-item i{
+  font-size:1.5rem;color:var(--primary);width:52px;height:52px;border-radius:50%;
+  background:var(--section-alt);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+}
+.trust-item h4{font-size:1rem;margin-bottom:6px;}
+.trust-item p{font-size:.85rem;margin:0;}
+
+/* ============ SUPPORT / FAQ ============ */
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;}
+.contact-form{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-l);padding:32px;}
+.form-row{margin-bottom:18px;}
+.form-row label{display:block;font-size:.85rem;font-weight:700;margin-bottom:6px;}
+.form-row input,.form-row textarea{
+  width:100%;padding:12px 14px;border-radius:var(--radius-s);
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:.92rem;resize:vertical;
+}
+.form-row input:focus,.form-row textarea:focus,select:focus,button:focus-visible,a:focus-visible{
+  outline:2px solid var(--primary);outline-offset:2px;
+}
+.form-success{
+  display:none;align-items:center;gap:10px;
+  background:var(--bg-alt);color:var(--cta-dark);border-radius:var(--radius-s);
+  padding:12px 16px;font-size:.88rem;margin-top:14px;font-weight:700;
+}
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-q{
+  width:100%;background:none;border:none;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 4px;font-size:.98rem;font-weight:700;color:var(--ink);
+}
+.faq-q i{transition:transform .25s ease;color:var(--cta);}
+.faq-item.open .faq-q i{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease, padding .3s ease;font-size:.9rem;color:var(--ink-soft);}
+.faq-item.open .faq-a{max-height:240px;padding-bottom:18px;}
+
+/* ============ CTA BAND ============ */
+.cta-band{
+  background:var(--primary);color:#fff;border-radius:var(--radius-l);
+  padding:50px 40px;display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.cta-band h3{color:#fff;font-size:1.6rem;margin-bottom:6px;}
+.cta-band p{color:#DCEFE3;margin:0;}
+
+/* ============ FOOTER — verde principal ============ */
+footer{background:var(--primary);color:#EAF4EE;padding:60px 0 26px;margin-top:20px;}
+footer h1,footer h2,footer h3,footer h4,footer h5{color:#fff;}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:36px;}
+.footer-grid h5{font-size:.85rem;margin-bottom:16px;color:#fff;}
+.footer-grid ul{list-style:none;padding:0;margin:0;}
+.footer-grid li{margin-bottom:10px;}
+.footer-grid a{font-size:.88rem;color:#D8ECE0;transition:color .2s ease;}
+.footer-grid a:hover{color:#fff;}
+.footer-grid p{color:#D8ECE0;}
+.social-row{display:flex;gap:10px;margin-top:14px;}
+.social-row .icon-btn{background:rgba(255,255,255,0.12);border-color:transparent;color:#fff;}
+.social-row .icon-btn:hover{background:rgba(255,255,255,0.24);}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.2);padding-top:22px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  font-size:.8rem;color:#D8ECE0;
+}
+.finish-flag{font-size:1rem;}
+
+/* ============ FLOATING CART ============ */
+.fab-cart{
+  position:fixed;bottom:26px;right:26px;z-index:80;
+  width:60px;height:60px;border-radius:50%;
+  background:var(--cta);color:#fff;border:none;
+  box-shadow:0 14px 30px rgba(36,90,117,.4);
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  transition:transform .2s ease;
+}
+.fab-cart:hover{transform:scale(1.08);}
+.fab-badge{
+  position:absolute;top:-4px;right:-4px;background:var(--primary);color:#fff;
+  font-size:.7rem;font-weight:700;min-width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);
+}
+
+.cart-overlay{position:fixed;inset:0;background:rgba(18,32,26,.45);z-index:90;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+.cart-overlay.open{opacity:1;pointer-events:auto;}
+.cart-panel{
+  position:fixed;top:0;right:0;height:100%;width:400px;max-width:92vw;
+  background:var(--card);z-index:95;box-shadow:-20px 0 50px rgba(0,0,0,.2);
+  transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;
+}
+.cart-panel.open{transform:translateX(0);}
+.cart-head{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.cart-head h3{margin:0;font-size:1.2rem;}
+.close-cart{background:none;border:none;font-size:1.2rem;color:var(--ink-soft);}
+.cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
+.cart-empty{text-align:center;color:var(--ink-soft);padding:40px 10px;font-size:.9rem;}
+.cart-line{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
+.cart-line .thumb{
+  width:56px;height:56px;border-radius:10px;background:var(--bg-alt);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;
+}
+.cart-line .thumb img{width:100%;height:100%;object-fit:cover;}
+.cart-line-info{flex:1;}
+.cart-line-info h4{font-size:.88rem;margin:0 0 4px;font-family:var(--font-body);font-weight:700;}
+.cart-line-info span{font-size:.8rem;color:var(--ink-soft);}
+.cart-line-remove{background:none;border:none;color:var(--ink-soft);font-size:.95rem;}
+.cart-line-remove:hover{color:var(--cta);}
+.cart-foot{border-top:1px solid var(--line);padding:20px 24px 26px;}
+.cart-total-row{display:flex;justify-content:space-between;font-size:1rem;font-weight:700;margin-bottom:16px;}
+.pay-icons{display:flex;gap:14px;font-size:1.7rem;color:var(--ink-soft);margin-bottom:16px;justify-content:center;}
+.pay-icons i.fa-cc-visa{color:#1A1F71;}
+.pay-icons i.fa-cc-mastercard{color:#EB001B;}
+.pay-icons i.fa-cc-paypal{color:#003087;}
+:root[data-theme="dark"] .pay-icons i{filter:brightness(1.4);}
+.pay-btn{
+  width:100%;background:var(--primary);color:#fff;border:none;
+  padding:14px;border-radius:100px;font-weight:700;font-size:.95rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.pay-btn:hover{background:var(--primary-light);}
+.pay-success{
+  display:none;text-align:center;background:var(--bg-alt);color:var(--cta-dark);
+  padding:12px;border-radius:var(--radius-s);margin-top:12px;font-size:.85rem;font-weight:700;
+}
+
+/* ============ TRACKING MODAL ============ */
+.modal-overlay{position:fixed;inset:0;background:rgba(18,32,26,.5);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--card);border-radius:var(--radius-l);padding:32px;max-width:420px;width:100%;box-shadow:var(--shadow-lift);position:relative;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.1rem;color:var(--ink-soft);}
+.modal-box input{
+  width:100%;padding:12px 14px;border-radius:var(--radius-s);
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);margin:14px 0;font-size:.92rem;
+}
+.track-result{display:none;background:var(--section-alt);border-radius:var(--radius-s);padding:14px;font-size:.86rem;margin-top:6px;}
+
+.toast{
+  position:fixed;bottom:100px;right:26px;z-index:85;
+  background:var(--primary);color:#fff;padding:12px 20px;border-radius:100px;
+  font-size:.85rem;font-weight:700;box-shadow:var(--shadow-lift);
+  display:flex;align-items:center;gap:8px;
+  opacity:0;transform:translateY(10px);transition:opacity .25s ease, transform .25s ease;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0);}
+
+@media (max-width:920px){
+  .hero .container{grid-template-columns:1fr;}
+  .hero-visual{order:-1;min-height:280px;}
+  .builder{grid-template-columns:1fr;}
+  .support-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:760px){
+  .nav-links{
+    position:fixed;top:0;right:0;height:100vh;width:78vw;max-width:320px;
+    background:var(--card);flex-direction:column;padding:90px 30px 30px;gap:22px;
+    transform:translateX(100%);transition:transform .3s ease;box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  }
+  .nav-links.open{transform:translateX(0);}
+  .hamburger{
+    display:flex;width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);
+    align-items:center;justify-content:center;font-size:1.1rem;color:var(--primary);
+  }
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:520px){
+  .section-pad{padding:60px 0;}
+  .footer-grid{grid-template-columns:1fr;}
+  .cta-band{padding:34px 24px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== RACE PROGRESS ===================== -->
+<div class="race-progress"><div class="race-progress-fill" id="raceFill"><span class="race-progress-runner"><i class="fa-solid fa-person-running"></i></span></div></div>
+
+<!-- ===================== TOPBAR ===================== -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-msg"><i class="fa-solid fa-truck-fast"></i> Envíos gratis en compras mayores a $50</div>
+    <button class="track-link" onclick="openTrackModal()"><i class="fa-solid fa-location-crosshairs"></i> Rastrear mi pedido</button>
+  </div>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav-wrap">
+  <div class="container">
+    <nav>
+      <a href="#inicio" class="brand"><span class="mark"><i class="fa-solid fa-person-running"></i></span> Marathon Vitamin Shops</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#crea-tu-pack">Crea tu pack</a></li>
+        <li><a href="#confianza">Por qué nosotros</a></li>
+        <li><a href="#soporte">Soporte</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Cambiar modo oscuro / claro"><i class="fa-solid fa-moon"></i></button>
+        <button class="icon-btn" id="cartIconBtn" aria-label="Abrir carrito" onclick="toggleCart(true)">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span class="badge" id="navCartCount">0</span>
+        </button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="inicio">
+  <div class="container">
+    <div>
+      <div class="route-marker"><span class="dot"></span><span class="track"></span> SALIDA</div>
+      <h1>La energía de correr una maratón, en cada cápsula.</h1>
+      <p class="lede">Más de 20 años surtiendo vitaminas por correo y en tienda física — ahora llevamos esa misma confianza a un solo lugar: tu pantalla. Fórmulas reales, envío rápido y un equipo que responde.</p>
+      <div class="hero-ctas">
+        <a href="#catalogo" class="btn btn-cta"><i class="fa-solid fa-bag-shopping"></i> Comprar ahora</a>
+        <a href="#crea-tu-pack" class="btn btn-outline">Crear mi pack</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="num" data-count="20">0<sup>+</sup></span><span class="lbl">Años surtiendo vitaminas</span></div>
+        <div class="hero-stat"><span class="num" data-count="48" data-suffix="h">0</span><span class="lbl">Envío a toda la ciudad</span></div>
+        <div class="hero-stat"><span class="num" data-count="4000" data-suffix="+">0</span><span class="lbl">Corredores surtidos</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-ring"></div>
+      <div class="hero-photo-wrap">
+        <img src="bote_verde_vitamina.jpg" alt="Bote de Vitamina C Boost" onerror="this.style.display='none'; this.parentElement.innerHTML+='<i class=&quot;fa-solid fa-prescription-bottle&quot; style=&quot;font-size:4rem;color:var(--primary);&quot;></i>';">
+      </div>
+      <div class="hero-chip chip-1"><i class="fa-solid fa-leaf"></i> 100% dosis clínicas</div>
+      <div class="hero-chip chip-2"><i class="fa-solid fa-bolt"></i> Envío en 24-48h</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CATÁLOGO ===================== -->
+<section class="section-pad" id="catalogo">
+  <div class="container">
+    <div class="section-head">
+      <div class="route-marker"><span class="dot"></span><span class="track"></span> KM 1 — CATÁLOGO</div>
+      <h2>Suplementos pensados para ir la distancia</h2>
+      <p>Cuatro fórmulas base, listas para enviarse hoy. Cada una con la dosis que verás en la etiqueta, sin rellenos raros.</p>
+    </div>
+    <div class="grid-products" id="productGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== CREA TU PACK ===================== -->
+<section class="section-pad bg-alt" id="crea-tu-pack">
+  <div class="container">
+    <div class="section-head">
+      <div class="route-marker"><span class="dot"></span><span class="track"></span> KM 2 — PERSONALIZA</div>
+      <h2>Crea tu pack</h2>
+      <p>Elige tus bases, ajusta la duración y arma tu propia rutina de suplementación.</p>
+    </div>
+    <div class="builder">
+      <div>
+        <h3>1. Elige tus bases</h3>
+        <div class="option-group" id="baseOptions"></div>
+        <h3>2. Elige la duración</h3>
+        <div class="option-group">
+          <select id="packSize">
+            <option value="1" data-label="Semanal">Semanal (x1)</option>
+            <option value="4" data-label="Mensual" selected>Mensual (x4) — ahorra 10%</option>
+            <option value="11" data-label="Trimestral">Trimestral (x12) — ahorra 20%</option>
+          </select>
+        </div>
+      </div>
+      <div class="builder-summary">
+        <div>
+          <h3>Tu pack</h3>
+          <div id="packLines"></div>
+          <p id="emptyPackMsg">Selecciona al menos una base para armar tu pack.</p>
+        </div>
+        <div>
+          <div class="summary-total">
+            <span>Total estimado</span>
+            <span class="amount" id="packTotal">$0.00</span>
+          </div>
+          <button class="btn btn-cta" style="width:100%;justify-content:center;" onclick="addCustomPack()"><i class="fa-solid fa-cart-plus"></i> Añadir pack al carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONFIANZA ===================== -->
+<section class="section-pad" id="confianza">
+  <div class="container">
+    <div class="section-head">
+      <div class="route-marker"><span class="dot"></span><span class="track"></span> KM 3 — CONFIANZA</div>
+      <h2>Por qué seguir corriendo con nosotros</h2>
+    </div>
+    <div class="trust-strip">
+      <div class="trust-item"><i class="fa-solid fa-shield-heart"></i><h4>Calidad verificada</h4><p>Cada lote se prueba en laboratorio antes de salir de bodega.</p></div>
+      <div class="trust-item"><i class="fa-solid fa-truck"></i><h4>Envío rápido</h4><p>Pedidos antes de las 2pm salen el mismo día.</p></div>
+      <div class="trust-item"><i class="fa-solid fa-headset"></i><h4>Soporte real</h4><p>Un equipo de nutrición responde tus dudas, no un bot genérico.</p></div>
+      <div class="trust-item"><i class="fa-solid fa-rotate-left"></i><h4>Devoluciones simples</h4><p>30 días para cambiar de opinión, sin preguntas incómodas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIOS ===================== -->
+<section class="section-pad bg-alt" id="testimonios">
+  <div class="container">
+    <div class="section-head">
+      <div class="route-marker"><span class="dot"></span><span class="track"></span> VOCES DE LA RUTA</div>
+      <h2>Lo que dicen quienes ya corrieron con nosotros</h2>
+    </div>
+    <div class="testi-grid" id="testiGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== SOPORTE + FAQ ===================== -->
+<section class="section-pad bg-alt" id="soporte">
+  <div class="container">
+    <div class="section-head">
+      <div class="route-marker"><span class="dot"></span><span class="track"></span> KM 4 — SOPORTE</div>
+      <h2>¿Dudas después de tu compra? Aquí seguimos</h2>
+    </div>
+    <div class="support-grid">
+      <div>
+        <form class="contact-form" id="supportForm">
+          <h3>Habla con soporte</h3>
+          <div class="form-row"><label for="scName">Nombre</label><input type="text" id="scName" required placeholder="Tu nombre"></div>
+          <div class="form-row"><label for="scEmail">Correo</label><input type="email" id="scEmail" required placeholder="tu@correo.com"></div>
+          <div class="form-row"><label for="scMsg">Mensaje</label><textarea id="scMsg" rows="4" required placeholder="Cuéntanos qué necesitas..."></textarea></div>
+          <button type="submit" class="btn btn-cta" style="width:100%;justify-content:center;"><i class="fa-solid fa-paper-plane"></i> Enviar mensaje</button>
+          <div class="form-success" id="formSuccess"><i class="fa-solid fa-circle-check"></i> Gracias, recibimos tu mensaje. Te respondemos en menos de 24h.</div>
+        </form>
+      </div>
+      <div id="faq">
+        <h3>Preguntas frecuentes</h3>
+        <div id="faqList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h3>Tu primer pack, con envío gratis</h3>
+        <p>Compras mayores a $50 no pagan envío en ningún punto del recorrido.</p>
+      </div>
+      <a href="#catalogo" class="btn btn-cta">Ver catálogo <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#inicio" class="brand" style="font-size:1.2rem;color:#fff;"><span class="mark" style="width:32px;height:32px;font-size:.85rem;background:rgba(255,255,255,0.15);"><i class="fa-solid fa-person-running"></i></span> Marathon Vitamin Shops</a>
+        <p style="margin-top:14px;max-width:32ch;">De tienda física y pedidos por correo a e-commerce completo. Misma confianza, más rápido.</p>
+        <div class="social-row">
+          <a href="https://www.facebook.com/profile.php?id=61594495378744" target="_blank" rel="noopener" class="icon-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/marathonvitaminshops" target="_blank" rel="noopener" class="icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@marathonvitaminshops" target="_blank" rel="noopener" class="icon-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div>
+        <h5>Tienda</h5>
+        <ul>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#crea-tu-pack">Crea tu pack</a></li>
+          <li><a href="#confianza">Por qué nosotros</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Ayuda</h5>
+        <ul>
+          <li><a href="#soporte">Contacto</a></li>
+          <li><a href="#faq">Preguntas frecuentes</a></li>
+          <li><a href="#" onclick="openTrackModal();return false;">Rastrear pedido</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <ul>
+          <li><a href="mailto:marathonvitaminshops@gmail.com"><i class="fa-solid fa-envelope"></i> marathonvitaminshops@gmail.com</a></li>
+          <li><a href="tel:+525513355552"><i class="fa-solid fa-phone"></i> +52 55 1335 5552</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span><span class="finish-flag">🏁</span> Meta — gracias por llegar hasta aquí</span>
+      <span>© 2026 Marathon Vitamin Shops. Todos los derechos reservados.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== FLOATING CART ===================== -->
+<button class="fab-cart" onclick="toggleCart(true)" aria-label="Ver carrito">
+  <i class="fa-solid fa-cart-shopping"></i>
+  <span class="fab-badge" id="fabCartCount">0</span>
+</button>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
+<aside class="cart-panel" id="cartPanel" aria-label="Carrito de compras">
+  <div class="cart-head">
+    <h3>Tu carrito</h3>
+    <button class="close-cart" onclick="toggleCart(false)" aria-label="Cerrar carrito"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <div class="pay-icons">
+      <i class="fa-brands fa-cc-visa"></i>
+      <i class="fa-brands fa-cc-mastercard"></i>
+      <i class="fa-brands fa-cc-paypal"></i>
+      <i class="fa-brands fa-cc-amex"></i>
+    </div>
+    <button class="pay-btn" onclick="simulatePayment()"><i class="fa-solid fa-lock"></i> Simular pago</button>
+    <div class="pay-success" id="paySuccess"><i class="fa-solid fa-circle-check"></i> ¡Pago simulado con éxito! Revisa tu correo para el detalle.</div>
+  </div>
+</aside>
+
+<!-- ===================== TRACKING MODAL ===================== -->
+<div class="modal-overlay" id="trackModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeTrackModal()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    <h3>Rastrea tu pedido</h3>
+    <p style="margin-bottom:0;">Ingresa tu número de orden para ver el estatus.</p>
+    <input type="text" id="trackInput" placeholder="Ej. MVS-10234">
+    <button class="btn btn-cta" style="width:100%;justify-content:center;" onclick="doTrack()">Buscar</button>
+    <div class="track-result" id="trackResult"></div>
+  </div>
+</div>
+
+<!-- ===================== CHATBOT ===================== -->
+<button class="chat-fab" id="chatFab" aria-label="Abrir chat de ayuda"><span class="pulse"></span><i class="fa-solid fa-comment-dots"></i></button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <span class="mark"><i class="fa-solid fa-person-running"></i></span>
+    <div>
+      <h4>Coach Maratón</h4>
+      <p>Tu asistente de suplementos</p>
+    </div>
+    <button class="chat-close" id="chatClose" aria-label="Cerrar chat"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-suggestions" id="chatSuggestions"></div>
+  <div class="chat-foot">
+    <input type="text" id="chatInput" placeholder="Escribe tu pregunta...">
+    <button id="chatSend" aria-label="Enviar"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toastMsg">Añadido al carrito</span></div>
+
+<script>
+/* ============================================================
+   DATA — 4 productos, rutas de imagen locales tal como se pidió
+   ============================================================ */
+const PRODUCTS = [
+  {
+    id:'vit-c', name:'Vitamina C Boost', price:18.99, tag:'Bote verde · Vitamina',
+    desc:'1000mg de vitamina C con bioflavonoides cítricos para reforzar tus defensas todos los días.',
+    img:'bote_verde_vitamina.jpg', rating:4.8, reviews:212, badge:''
+  },
+  {
+    id:'complejo-b', name:'Complejo B Energía', price:21.50, tag:'Bote azul · Suplemento',
+    desc:'8 vitaminas B esenciales que ayudan a tu cuerpo a convertir cada comida en combustible real.',
+    img:'bote_azul_suplemento.jpg', rating:4.6, reviews:147, badge:''
+  },
+  {
+    id:'colageno', name:'Colágeno + Biotina', price:24.50, tag:'Bote rosa · Vitamina',
+    desc:'Colágeno hidrolizado con biotina para apoyar piel, cabello y uñas desde adentro.',
+    img:'bote_rosa_vitamina.jpg', rating:4.9, reviews:301, badge:'Favorito'
+  },
+  {
+    id:'pack-energia', name:'Pack Energía Maratón', price:49.90, tag:'Bote naranja · Suplemento',
+    desc:'La combinación completa: electrolitos, cafeína natural y vitaminas B para ir la distancia.',
+    img:'bote_naranja_suplemento.jpg', rating:5.0, reviews:98, badge:'Más vendido'
+  }
+];
+
+function starRow(rating){
+  const full = Math.round(rating);
+  return '★'.repeat(full) + '☆'.repeat(5-full);
+}
+
+const FALLBACK_ICON = 'fa-solid fa-prescription-bottle-medical';
+
+function imgWithFallback(src, alt){
+  return `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('i'),{className:'${FALLBACK_ICON}',style:'font-size:2.6rem;color:var(--primary);'}));">`;
+}
+
+const BASES = PRODUCTS.map(p=>({id:'b-'+p.id, label:p.name, price:p.price}));
+
+const FAQS = [
+  {q:'¿Cuánto tarda el envío?', a:'Los pedidos hechos antes de las 2pm salen el mismo día y llegan en 24-48 horas dentro de la ciudad, o de 3 a 5 días hábiles al resto del país.'},
+  {q:'¿Puedo comprar en tienda física y en línea?', a:'Sí, seguimos operando nuestra tienda física y el pedido por correo tradicional. El sitio es un canal adicional, no un reemplazo.'},
+  {q:'¿Cómo cancelo o cambio mi pedido?', a:'Escríbenos desde el formulario de soporte dentro de las primeras 2 horas después de la compra y con gusto lo ajustamos.'},
+  {q:'¿Los productos tienen garantía?', a:'Sí, cuentas con 30 días para devoluciones si el producto no cumple tus expectativas, conservando al menos el 70% del contenido.'},
+  {q:'¿Ofrecen suscripción mensual?', a:'Sí, en "Crea tu pack" puedes elegir duración mensual o trimestral con descuento automático.'}
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let cart = [];
+try{
+  const saved = localStorage.getItem('mvs_cart');
+  if(saved) cart = JSON.parse(saved);
+}catch(e){ cart = []; }
+
+function saveCart(){
+  try{ localStorage.setItem('mvs_cart', JSON.stringify(cart)); }catch(e){}
+}
+
+/* ============================================================
+   RENDER PRODUCTS
+   ============================================================ */
+const grid = document.getElementById('productGrid');
+PRODUCTS.forEach(p=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    ${p.badge ? `<span class="badge-fly"><i class="fa-solid fa-medal"></i> ${p.badge}</span>` : ''}
+    <div class="card-img-wrap">${imgWithFallback(p.img, p.name)}</div>
+    <div class="card-body">
+      <div class="card-tag">${p.tag}</div>
+      <h3>${p.name}</h3>
+      <div class="card-rating"><span class="stars">${starRow(p.rating)}</span> ${p.rating.toFixed(1)} (${p.reviews})</div>
+      <p class="desc">${p.desc}</p>
+      <div class="card-footer">
+        <span class="price">$${p.price.toFixed(2)}</span>
+        <button class="add-btn" data-id="${p.id}"><i class="fa-solid fa-plus"></i> Añadir</button>
+      </div>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+
+grid.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.add-btn');
+  if(!btn) return;
+  const prod = PRODUCTS.find(p=>p.id===btn.dataset.id);
+  addToCart({id:prod.id, name:prod.name, price:prod.price, img:prod.img});
+  btn.classList.add('added');
+  btn.innerHTML = '<i class="fa-solid fa-check"></i> Añadido';
+  setTimeout(()=>{ btn.classList.remove('added'); btn.innerHTML = '<i class="fa-solid fa-plus"></i> Añadir'; }, 1200);
+  showToast(prod.name + ' se añadió al carrito');
+});
+
+/* ============================================================
+   CART LOGIC
+   ============================================================ */
+function addToCart(item){
+  const existing = cart.find(c=>c.id===item.id);
+  if(existing){ existing.qty += 1; }
+  else{ cart.push({...item, qty:1}); }
+  saveCart();
+  renderCart();
+}
+
+function removeFromCart(id){
+  cart = cart.filter(c=>c.id!==id);
+  saveCart();
+  renderCart();
+}
+
+function changeQty(id, delta){
+  const item = cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0){ cart = cart.filter(c=>c.id!==id); }
+  saveCart();
+  renderCart();
+}
+
+function cartCount(){ return cart.reduce((s,c)=>s+c.qty,0); }
+function cartTotal(){ return cart.reduce((s,c)=>s+c.qty*c.price,0); }
+
+function renderCart(){
+  const count = cartCount();
+  document.getElementById('navCartCount').textContent = count;
+  document.getElementById('fabCartCount').textContent = count;
+
+  const itemsWrap = document.getElementById('cartItems');
+  if(cart.length===0){
+    itemsWrap.innerHTML = '<div class="cart-empty"><i class="fa-solid fa-basket-shopping" style="font-size:1.8rem;display:block;margin-bottom:10px;"></i>Tu carrito está vacío.<br>Añade algo de energía.</div>';
+  } else {
+    itemsWrap.innerHTML = cart.map(c=>`
+      <div class="cart-line">
+        <div class="thumb">${imgWithFallback(c.img || '', c.name)}</div>
+        <div class="cart-line-info">
+          <h4>${c.name}</h4>
+          <div class="qty-stepper">
+            <button aria-label="Restar" onclick="changeQty('${c.id}',-1)"><i class="fa-solid fa-minus"></i></button>
+            <span>${c.qty}</span>
+            <button aria-label="Sumar" onclick="changeQty('${c.id}',1)"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <span style="display:block;margin-top:4px;">$${(c.qty*c.price).toFixed(2)}</span>
+        </div>
+        <button class="cart-line-remove" aria-label="Quitar" onclick="removeFromCart('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+  document.getElementById('cartTotal').textContent = '$' + cartTotal().toFixed(2);
+  document.getElementById('paySuccess').style.display = 'none';
+}
+renderCart();
+
+function toggleCart(open){
+  document.getElementById('cartOverlay').classList.toggle('open', open);
+  document.getElementById('cartPanel').classList.toggle('open', open);
+}
+
+function simulatePayment(){
+  if(cart.length===0){ showToast('Tu carrito está vacío'); return; }
+  document.getElementById('paySuccess').style.display = 'flex';
+  cart = [];
+  saveCart();
+  setTimeout(()=>{ renderCart(); }, 1800);
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer;
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> toast.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   CREA TU PACK
+   ============================================================ */
+const baseOptionsWrap = document.getElementById('baseOptions');
+BASES.forEach(b=>{
+  const row = document.createElement('div');
+  row.className = 'check-row';
+  row.innerHTML = `
+    <label>
+      <input type="checkbox" class="base-check" value="${b.id}" data-price="${b.price}" data-label="${b.label}">
+      ${b.label}
+    </label>
+    <span class="add-price">$${b.price.toFixed(2)}</span>
+  `;
+  baseOptionsWrap.appendChild(row);
+});
+
+function updatePackSummary(){
+  const checks = [...document.querySelectorAll('.base-check:checked')];
+  const sizeSelect = document.getElementById('packSize');
+  const multiplier = parseInt(sizeSelect.value,10);
+  const sizeLabel = sizeSelect.selectedOptions[0].dataset.label;
+  const linesWrap = document.getElementById('packLines');
+  const emptyMsg = document.getElementById('emptyPackMsg');
+
+  if(checks.length===0){
+    linesWrap.innerHTML = '';
+    emptyMsg.style.display = 'block';
+    document.getElementById('packTotal').textContent = '$0.00';
+    return;
+  }
+  emptyMsg.style.display = 'none';
+  let total = 0;
+  linesWrap.innerHTML = checks.map(c=>{
+    const price = parseFloat(c.dataset.price);
+    total += price;
+    return `<div class="summary-line"><span>${c.dataset.label}</span><span>$${price.toFixed(2)}</span></div>`;
+  }).join('') + `<div class="summary-line"><span>Duración</span><span>${sizeLabel}</span></div>`;
+
+  let finalTotal = total * multiplier;
+  if(multiplier===4) finalTotal *= 0.9;
+  if(multiplier===11) finalTotal *= 0.8;
+  document.getElementById('packTotal').textContent = '$' + finalTotal.toFixed(2);
+}
+document.addEventListener('change', (e)=>{
+  if(e.target.classList.contains('base-check') || e.target.id==='packSize'){
+    updatePackSummary();
+  }
+});
+updatePackSummary();
+
+function addCustomPack(){
+  const checks = [...document.querySelectorAll('.base-check:checked')];
+  if(checks.length===0){ showToast('Elige al menos una base para tu pack'); return; }
+  const sizeSelect = document.getElementById('packSize');
+  const multiplier = parseInt(sizeSelect.value,10);
+  const sizeLabel = sizeSelect.selectedOptions[0].dataset.label;
+  let total = checks.reduce((s,c)=>s+parseFloat(c.dataset.price),0) * multiplier;
+  if(multiplier===4) total *= 0.9;
+  if(multiplier===11) total *= 0.8;
+  const names = checks.map(c=>c.dataset.label).join(' + ');
+  addToCart({
+    id:'custom-'+Date.now(),
+    name:'Pack personalizado (' + sizeLabel + '): ' + names,
+    price: total,
+    img:'bote_verde_vitamina.jpg'
+  });
+  showToast('Tu pack personalizado se añadió al carrito');
+}
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+const faqList = document.getElementById('faqList');
+FAQS.forEach((f)=>{
+  const item = document.createElement('div');
+  item.className = 'faq-item';
+  item.innerHTML = `
+    <button class="faq-q" aria-expanded="false">${f.q} <i class="fa-solid fa-plus"></i></button>
+    <div class="faq-a">${f.a}</div>
+  `;
+  faqList.appendChild(item);
+  item.querySelector('.faq-q').addEventListener('click', ()=>{
+    const isOpen = item.classList.contains('open');
+    item.classList.toggle('open', !isOpen);
+    item.querySelector('.faq-q').setAttribute('aria-expanded', String(!isOpen));
+  });
+});
+
+/* ============================================================
+   SUPPORT FORM
+   ============================================================ */
+document.getElementById('supportForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementById('formSuccess').style.display = 'flex';
+  this.reset();
+  setTimeout(()=>{ document.getElementById('formSuccess').style.display = 'none'; }, 5000);
+});
+
+/* ============================================================
+   ORDER TRACKING MODAL
+   ============================================================ */
+function openTrackModal(){ document.getElementById('trackModal').classList.add('open'); }
+function closeTrackModal(){
+  document.getElementById('trackModal').classList.remove('open');
+  document.getElementById('trackResult').style.display='none';
+  document.getElementById('trackInput').value='';
+}
+function doTrack(){
+  const val = document.getElementById('trackInput').value.trim();
+  const result = document.getElementById('trackResult');
+  if(!val){
+    result.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Ingresa un número de orden válido.';
+  } else {
+    result.innerHTML = `<i class="fa-solid fa-truck-fast"></i> Pedido <strong>${val}</strong>: en camino, llegada estimada en 2-3 días hábiles.`;
+  }
+  result.style.display = 'block';
+}
+
+/* ============================================================
+   DARK MODE — invierte fondos, conserva verdes y azul de marca
+   ============================================================ */
+const root = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+
+function applyTheme(theme){
+  if(theme === 'dark'){
+    root.setAttribute('data-theme','dark');
+    themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  } else {
+    root.removeAttribute('data-theme');
+    themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+  }
+}
+let savedTheme = 'light';
+try{ savedTheme = localStorage.getItem('mvs_theme') || 'light'; }catch(e){}
+applyTheme(savedTheme);
+
+themeBtn.addEventListener('click', ()=>{
+  const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try{ localStorage.setItem('mvs_theme', next); }catch(e){}
+});
+
+/* ============================================================
+   MOBILE NAV
+   ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navLinks = document.getElementById('navLinks');
+hamburgerBtn.addEventListener('click', ()=>{
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('click', ()=> navLinks.classList.remove('open'));
+});
+
+/* ============================================================
+   RACE PROGRESS BAR (scroll)
+   ============================================================ */
+const raceFill = document.getElementById('raceFill');
+function updateRaceProgress(){
+  const scrolled = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = max>0 ? Math.min(100,(scrolled/max)*100) : 0;
+  raceFill.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateRaceProgress, {passive:true});
+updateRaceProgress();
+
+/* ============================================================
+   HERO STAT COUNTERS
+   ============================================================ */
+document.querySelectorAll('.hero-stat .num').forEach(el=>{
+  const target = parseInt(el.dataset.count,10);
+  const suffix = el.dataset.suffix || '';
+  const sup = el.querySelector('sup');
+  const supHTML = sup ? sup.outerHTML : '';
+  let started = false;
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting && !started){
+        started = true;
+        const duration = 1200, steps = 40, stepTime = duration/steps;
+        let count = 0;
+        const timer = setInterval(()=>{
+          count++;
+          const val = Math.round(target * (count/steps));
+          el.innerHTML = val + suffix + supHTML;
+          if(count>=steps){ clearInterval(timer); el.innerHTML = target + suffix + supHTML; }
+        }, stepTime);
+      }
+    });
+  }, {threshold:.4});
+  observer.observe(el);
+});
+
+/* ============================================================
+   TESTIMONIOS
+   ============================================================ */
+const TESTIMONIALS = [
+  {name:'Renata O.', meta:'Corredora de 10K · CDMX', quote:'Empecé con el Complejo B para mis entrenamientos matutinos y de verdad se nota la diferencia en la energía a media semana.', rating:5},
+  {name:'Iván M.', meta:'Cliente desde 2019', quote:'Llevo años comprando en la tienda física y ahora pido en línea. Mismo trato, mismos productos, pero llega a mi puerta.', rating:5},
+  {name:'Cynthia L.', meta:'Corredora de maratón', quote:'El Pack Energía Maratón es justo lo que necesitaba antes de mis carreras largas. Ya no me quedo sin fuerzas en el km 30.', rating:5}
+];
+const testiGrid = document.getElementById('testiGrid');
+TESTIMONIALS.forEach(t=>{
+  const card = document.createElement('div');
+  card.className = 'testi-card';
+  const initials = t.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  card.innerHTML = `
+    <div class="testi-stars">${starRow(t.rating)}</div>
+    <p class="testi-quote">"${t.quote}"</p>
+    <div class="testi-who">
+      <div class="testi-avatar">${initials}</div>
+      <div><div class="name">${t.name}</div><div class="meta">${t.meta}</div></div>
+    </div>
+  `;
+  testiGrid.appendChild(card);
+});
+
+/* ============================================================
+   CHATBOT — "Coach Maratón"
+   ============================================================ */
+const chatFab = document.getElementById('chatFab');
+const chatPanel = document.getElementById('chatPanel');
+const chatBody = document.getElementById('chatBody');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatSuggestions = document.getElementById('chatSuggestions');
+let chatOpened = false;
+let chatHistory = [];
+let sampleFn = null;
+
+const CHAT_SYSTEM = `Eres "Coach Maratón", el asistente de la tienda Marathon Vitamin Shops. Responde en español, en tono cercano, breve (máximo 3 frases) y motivador con temática de running. Solo usas esta información de la tienda para responder:
+Productos: Vitamina C Boost $18.99 (1000mg, defensas), Complejo B Energía $21.50 (8 vitaminas B, energía), Colágeno + Biotina $24.50 (piel/cabello/uñas), Pack Energía Maratón $49.90 (electrolitos, cafeína natural, vitaminas B).
+Envíos: gratis en compras mayores a $50; pedidos antes de las 2pm salen el mismo día; 24-48h en la ciudad, 3-5 días hábiles al resto del país.
+Devoluciones: 30 días, conservando 70% del contenido.
+Suscripción: sección "Crea tu pack", duración semanal, mensual (10% descuento) o trimestral (20% descuento).
+Contacto humano: marathonvitaminshops@gmail.com o el formulario de soporte.
+Si preguntan algo fuera de estos temas, indica amablemente que puedes ayudar con productos, envíos, pedidos y suscripciones, y sugiere el formulario de soporte para lo demás. Nunca inventes datos médicos ni dosis fuera de lo indicado.`;
+
+function addChatMsg(text, who){
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg ' + who;
+  msg.textContent = text;
+  chatBody.appendChild(msg);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return msg;
+}
+function addTyping(){
+  const t = document.createElement('div');
+  t.className = 'chat-msg bot typing';
+  t.innerHTML = '<span></span><span></span><span></span>';
+  chatBody.appendChild(t);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return t;
+}
+function setSuggestions(list){
+  chatSuggestions.innerHTML = list.map(s=>`<button class="chat-chip">${s}</button>`).join('');
+  chatSuggestions.querySelectorAll('.chat-chip').forEach(b=>{
+    b.addEventListener('click', ()=>{ chatInput.value = b.textContent; sendChat(); });
+  });
+}
+
+function fallbackAnswer(text){
+  const q = text.toLowerCase();
+  if(q.includes('env')) return 'Los pedidos antes de las 2pm salen el mismo día: 24-48h dentro de la ciudad, o 3-5 días hábiles al resto del país. ¡Y el envío es gratis en compras mayores a $50! 🏃';
+  if(q.includes('devol') || q.includes('garant')) return 'Tienes 30 días para devoluciones, conservando al menos el 70% del contenido. Escríbenos por el formulario de soporte si necesitas ayuda.';
+  if(q.includes('pack') || q.includes('suscrip')) return 'En "Crea tu pack" eliges tus bases y la duración: semanal, mensual (10% de descuento) o trimestral (20% de descuento). ¡Arma tu propia rutina!';
+  if(q.includes('precio') || q.includes('cuesta') || q.includes('cuánto')) return 'Vitamina C Boost $18.99, Complejo B Energía $21.50, Colágeno + Biotina $24.50 y Pack Energía Maratón $49.90.';
+  if(q.includes('pedido') || q.includes('rastre')) return 'Puedes rastrear tu pedido desde el botón "Rastrear mi pedido" en la parte superior de la página.';
+  return 'Puedo ayudarte con productos, envíos, devoluciones y el armado de tu pack. ¿Sobre cuál quieres saber más?';
+}
+
+async function ensureSample(){
+  if(sampleFn !== null) return sampleFn;
+  try{
+    if(window.claude && window.claude.use){
+      const s = await window.claude.use('sample');
+      sampleFn = s || false;
+    } else { sampleFn = false; }
+  }catch(e){ sampleFn = false; }
+  return sampleFn;
+}
+
+async function sendChat(){
+  const text = chatInput.value.trim();
+  if(!text) return;
+  addChatMsg(text, 'user');
+  chatHistory.push({role:'user', content:text});
+  chatInput.value = '';
+  chatSuggestions.innerHTML = '';
+  const typingEl = addTyping();
+
+  const s = await ensureSample();
+  if(s){
+    try{
+      const res = await s([{role:'user', content: CHAT_SYSTEM + '\n\nHistorial reciente y pregunta del cliente: ' + text}]);
+      typingEl.remove();
+      addChatMsg(res.text || fallbackAnswer(text), 'bot');
+    }catch(e){
+      typingEl.remove();
+      addChatMsg(fallbackAnswer(text), 'bot');
+    }
+  } else {
+    setTimeout(()=>{
+      typingEl.remove();
+      addChatMsg(fallbackAnswer(text), 'bot');
+    }, 500);
+  }
+}
+
+chatFab.addEventListener('click', ()=>{
+  chatPanel.classList.toggle('open');
+  if(!chatOpened){
+    chatOpened = true;
+    addChatMsg('¡Hola! Soy Coach Maratón 🏃 ¿En qué te ayudo hoy: productos, envíos o tu pack personalizado?', 'bot');
+    setSuggestions(['¿Cuánto tarda el envío?', '¿Qué productos tienen?', '¿Cómo armo mi pack?']);
+    ensureSample();
+  }
+});
+document.getElementById('chatClose').addEventListener('click', ()=> chatPanel.classList.remove('open'));
+chatSend.addEventListener('click', sendChat);
+chatInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendChat(); });
+</script>
+</body>
+</html>
